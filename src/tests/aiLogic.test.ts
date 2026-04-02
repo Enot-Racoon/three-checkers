@@ -1,6 +1,6 @@
 import { describe, test, expect } from "bun:test";
 import { getBestMove } from "@/logic/aiLogic";
-import { createInitialBoard, applyMove } from "@/logic/gameLogic";
+import { createInitialBoard } from "@/logic/gameLogic";
 import { Player, PieceType, type Piece } from "@/types";
 
 describe("aiLogic", () => {

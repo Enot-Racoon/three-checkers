@@ -1,5 +1,10 @@
 import { describe, test, expect } from "bun:test";
-import { createInitialBoard, getValidMoves, applyMove, BOARD_SIZE } from "@/logic/gameLogic";
+import {
+  createInitialBoard,
+  getValidMoves,
+  applyMove,
+  BOARD_SIZE,
+} from "@/logic/gameLogic";
 import { Player, PieceType } from "@/types";
 
 describe("gameLogic", () => {
