@@ -1,8 +1,8 @@
 # Three Checkers: Grandmaster Rival
 
-A stunning 3D checkers game built with React, Three.js. Challenge yourself against an AI opponent with dynamic lighting, smooth animations, and real-time AI rival.
+A stunning 3D checkers game built with React, Three.js, and Bun. Challenge yourself against an AI opponent with dynamic lighting, smooth animations, and real-time AI rival.
 
-![Three.js](https://img.shields.io/badge/Three.js-r182-orange) ![React](https://img.shields.io/badge/React-19.2-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-informational)
+![Three.js](https://img.shields.io/badge/Three.js-r183-orange) ![React](https://img.shields.io/badge/React-19-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-informational) ![Bun](https://img.shields.io/badge/Bun-1.3.3-yellow)
 
 ## ✨ Features
 
@@ -25,15 +25,14 @@ A stunning 3D checkers game built with React, Three.js. Challenge yourself again
 
 ### Prerequisites
 
-- **Node.js** (v18 or higher recommended)
-- **Bun** package manager (recommended) or npm
+- **Bun** package manager (v1.3.3 or higher)
 
 ### Installation
 
-1. **Clone the repository** (or navigate to the project directory):
+1. **Navigate to the project directory**:
 
    ```bash
-   cd three-checkers/debug/example
+   cd three-checkers
    ```
 
 2. **Install dependencies**:
@@ -50,25 +49,27 @@ A stunning 3D checkers game built with React, Three.js. Challenge yourself again
 
 4. **Open your browser** and navigate to:
    ```
-   http://localhost:5173
+   http://localhost:3000
    ```
 
 ## 🛠️ Tech Stack
 
-| Category         | Technology                                      |
-| ---------------- | ----------------------------------------------- |
-| **Frontend**     | React 19, TypeScript                            |
-| **3D Rendering** | Three.js, @react-three/fiber, @react-three/drei |
-| **Build Tool**   | Vite 6                                          |
-| **AI Logic**     | Minimax with Alpha-Beta Pruning                 |
+| Category         | Technology                                           |
+| ---------------- | ---------------------------------------------------- |
+| **Frontend**     | React 19, TypeScript                                 |
+| **3D Rendering** | Three.js r183, @react-three/fiber, @react-three/drei |
+| **Runtime**      | Bun 1.3.3                                            |
+| **Build Tool**   | Bun.build                                            |
+| **Styling**      | Tailwind CSS 4, shadcn/ui components                 |
+| **AI Logic**     | Minimax with Alpha-Beta Pruning                      |
 
 ## 🎯 Available Scripts
 
-| Command           | Description                              |
-| ----------------- | ---------------------------------------- |
-| `bun run dev`     | Start development server with hot reload |
-| `bun run build`   | Build production bundle                  |
-| `bun run preview` | Preview production build locally         |
+| Command         | Description                              |
+| --------------- | ---------------------------------------- |
+| `bun run dev`   | Start development server with hot reload |
+| `bun run build` | Build production bundle to `dist/`       |
+| `bun run start` | Start production server                  |
 
 ## 🤖 AI Features
 
@@ -76,39 +77,78 @@ A stunning 3D checkers game built with React, Three.js. Challenge yourself again
 
 - **Algorithm**: Minimax with Alpha-Beta Pruning
 - **Search Depth**: 4 plies
-- **Evaluation**: Material count + positional bonuses
+- **Evaluation**: Material count + positional bonuses + advancement bonus
 
 ## 🎨 Visual Features
 
 - **Dynamic Lighting**: Spotlights follow the current player's turn
-  - Red turn: Warm orange lighting
-  - Black turn: Cool blue lighting
+  - Red turn: Warm orange lighting (`#ffedd5`)
+  - Black turn: Cool blue lighting (`#e0f2fe`)
 - **Floating Animation**: Board gently floats with realistic physics
 - **Contact Shadows**: Real-time shadow rendering
-- **Piece Animations**: Smooth transitions for moves and captures
-- **Death Animation**: Captured pieces fade out dramatically
+- **Piece Animations**: Smooth transitions for moves and captures with hop animation
+- **Death Animation**: Captured pieces shrink and fade out dramatically
+- **Last Move Highlight**: Golden glow on source and destination squares
 
 ## ⚙️ Configuration
 
-### Vite Configuration
+### Bun Configuration
 
-The project uses Vite 6 with React plugin for fast development and optimized builds. See `vite.config.ts` for details.
+The project uses Bun's native build tool for fast builds. See `build.ts` for build configuration and `bunfig.toml` for Bun settings.
 
 ### TypeScript
 
-Strict TypeScript configuration for type safety. See `tsconfig.json` for compiler options.
+Strict TypeScript configuration for type safety with path aliases (`@/*` → `./src/*`). See `tsconfig.json` for compiler options.
+
+### Build Options
+
+```bash
+# Build with minification
+bun run build --minify
+
+# Build with sourcemaps
+bun run build --sourcemap=linked
+
+# Custom output directory
+bun run build --outdir=build
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── app/              # App entry point and global styles
+├── components/       # React components
+│   ├── Board3D.tsx   # 3D board and pieces
+│   ├── UIOverlay.tsx # Game UI overlay
+│   └── ui/           # Reusable UI components
+├── logic/            # Game logic
+│   ├── gameLogic.ts  # Rules, valid moves, board state
+│   └── aiLogic.ts    # AI minimax algorithm
+├── lib/              # Utilities
+├── types.ts          # TypeScript type definitions
+├── frontend.tsx      # React entry point
+├── index.ts          # Bun server entry point
+└── index.html        # HTML template
+```
 
 ## 🔧 Troubleshooting
 
 ### Performance Issues
 
-- Reduce shadow quality in `App.tsx` if experiencing lag
+- Reduce shadow quality in `App.tsx` (shadow-mapSize)
 - Lower the AI search depth in `aiLogic.ts` (default: 4)
+- Reduce fog distance in `App.tsx`
 
 ### Build Errors
 
 - Clear `node_modules` and reinstall: `rm -rf node_modules && bun install`
-- Clear Vite cache: `rm -rf node_modules/.vite`
+- Clear dist folder: `rm -rf dist && bun run build`
+
+### Server Issues
+
+- Check if port 3000 is available
+- Verify Bun version: `bun --version`
 
 ## 📝 Game Rules
 
@@ -130,6 +170,7 @@ MIT License - feel free to use this code for your own projects.
 - **Three.js** community for amazing 3D web graphics tools
 - **React Three Fiber** for making Three.js accessible in React
 - **@react-three/drei** for useful Three.js helpers
+- **Bun** for blazing fast JavaScript runtime
 
 ---
 
