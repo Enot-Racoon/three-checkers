@@ -65,15 +65,17 @@ A stunning 3D checkers game built with React, Three.js, and Bun. Challenge yours
 
 ## 🎯 Available Scripts
 
-| Command                | Description                              |
-| ---------------------- | ---------------------------------------- |
-| `bun run dev`          | Start development server with hot reload |
-| `bun run build`        | Build production bundle to `dist/`       |
-| `bun run start`        | Start production server                  |
-| `bun run lint`         | Run ESLint to check code quality         |
-| `bun run lint:fix`     | Run ESLint and fix auto-fixable issues   |
-| `bun run format`       | Format code with Prettier                |
-| `bun run format:check` | Check code formatting without changes    |
+| Command                 | Description                              |
+| ----------------------- | ---------------------------------------- |
+| `bun run dev`           | Start development server with hot reload |
+| `bun run build`         | Build production bundle to `dist/`       |
+| `bun run start`         | Start production server                  |
+| `bun run test`          | Run tests with Bun test runner           |
+| `bun run test:coverage` | Run tests with coverage report           |
+| `bun run lint`          | Run ESLint to check code quality         |
+| `bun run lint:fix`      | Run ESLint and fix auto-fixable issues   |
+| `bun run format`        | Format code with Prettier                |
+| `bun run format:check`  | Check code formatting without changes    |
 
 ## 🤖 AI Features
 

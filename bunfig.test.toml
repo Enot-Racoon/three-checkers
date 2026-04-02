@@ -1,0 +1,7 @@
+export default {
+  test: {
+    root: "./src",
+    setupFiles: ["./src/tests/setup.ts"],
+    environment: "happy-dom" as const,
+  },
+};
