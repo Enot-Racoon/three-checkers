@@ -3,9 +3,9 @@ import { Player, PieceType, type Move, type Piece } from "@/types";
 export const BOARD_SIZE = 8;
 
 export const createInitialBoard = (): (Piece | null)[][] => {
-  const board: (Piece | null)[][] = Array(BOARD_SIZE)
-    .fill(null)
-    .map(() => Array(BOARD_SIZE).fill(null));
+  const board: (Piece | null)[][] = Array.from({ length: BOARD_SIZE }, () =>
+    Array.from({ length: BOARD_SIZE }, () => null),
+  );
 
   for (let row = 0; row < BOARD_SIZE; row++) {
     for (let col = 0; col < BOARD_SIZE; col++) {

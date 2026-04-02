@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -112,7 +112,6 @@ const Square: React.FC<SquareProps> = ({
   isLastMove,
   onClick,
 }) => {
-  const [hovered, setHovered] = useState(false);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
   useFrame((state) => {
@@ -135,8 +134,6 @@ const Square: React.FC<SquareProps> = ({
     <mesh
       position={[col - offset, -0.1, row - offset]}
       receiveShadow
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
       onClick={(e) => {
         e.stopPropagation();
         onClick();

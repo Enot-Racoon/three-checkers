@@ -82,7 +82,7 @@ const App: React.FC = () => {
         (m) => m.to.row === row && m.to.col === col,
       );
       if (move) {
-        performMove(move);
+        void performMove(move);
       }
     }
   };
@@ -112,7 +112,8 @@ const App: React.FC = () => {
     }
 
     if (wasJump) {
-      const updatedPiece = newBoard[move.to.row]?.[move.to.col]!;
+      const updatedPiece = newBoard[move.to.row]?.[move.to.col];
+      if (!updatedPiece) return;
       const nextJumps = getValidMoves(
         newBoard,
         gameState.turn,
@@ -143,7 +144,7 @@ const App: React.FC = () => {
 
     if (!checkGameOver(newBoard, nextTurn)) {
       if (nextTurn === Player.BLACK) {
-        triggerAI(newBoard);
+        await triggerAI(newBoard);
       } else {
         console.log(`Player moved piece to ${move.to.row},${move.to.col}`);
       }
@@ -178,7 +179,7 @@ const App: React.FC = () => {
         setGameState((prev) => ({
           ...prev,
           board: newBoard,
-          lastMove: currentMove!,
+          lastMove: currentMove,
         }));
 
         if (captured) {
@@ -194,17 +195,19 @@ const App: React.FC = () => {
         // Chain multi-jumps one by one
         let nextJumps: Move[] = [];
         if (wasJump) {
-          const piece = workingBoard[currentMove.to.row]?.[currentMove.to.col]!;
-          nextJumps = getValidMoves(workingBoard, Player.BLACK, piece).filter(
-            (m) => !!m.captured,
-          );
+          const piece = workingBoard[currentMove.to.row]?.[currentMove.to.col];
+          if (piece) {
+            nextJumps = getValidMoves(workingBoard, Player.BLACK, piece).filter(
+              (m) => !!m.captured,
+            );
+          }
         }
 
         if (nextJumps.length > 0) {
           await new Promise((r) => setTimeout(r, 600)); // Pause between jumps
-          currentMove = nextJumps[0] ?? currentMove;
+          currentMove = nextJumps[0]!;
         } else {
-          currentMove = null as any;
+          break;
         }
       }
 
