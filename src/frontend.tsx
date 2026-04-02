@@ -6,7 +6,7 @@
  */
 
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import App from "@/app";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
@@ -21,7 +21,8 @@ const app = (
 
 if (import.meta.hot) {
   // With hot module reloading, `import.meta.hot.data` is persisted.
-  const root = (import.meta.hot.data.root ??= createRoot(elem));
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const root = (import.meta.hot.data.root ??= createRoot(elem)) as Root;
   root.render(app);
 } else {
   // The hot module reloading API is not available in production.
