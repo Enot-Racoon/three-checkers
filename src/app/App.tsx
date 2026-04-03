@@ -24,6 +24,8 @@ import UIOverlay from "@/components/UIOverlay";
 import { Player, type Piece, type Move, type ExtendedGameState } from "@/types";
 import { useWindowSize } from "@/lib/hooks";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const App: React.FC = () => {
   const [gameState, setGameState] = useState<ExtendedGameState>({
     board: createInitialBoard(),
@@ -257,7 +259,7 @@ const App: React.FC = () => {
         shadows
         gl={{ antialias: true, toneMapping: THREE.ReinhardToneMapping }}
       >
-        <Stats />
+        {isDev && <Stats />}
         <PerspectiveCamera makeDefault position={[0, 11, 11]} fov={fov} />
         <OrbitControls
           maxPolarAngle={Math.PI / 2.25}
