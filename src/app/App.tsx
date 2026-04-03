@@ -8,6 +8,7 @@ import {
   Environment,
   ContactShadows,
   Float,
+  Stats,
 } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -21,6 +22,7 @@ import Board3D from "@/components/Board3D";
 import UIOverlay from "@/components/UIOverlay";
 
 import { Player, type Piece, type Move, type ExtendedGameState } from "@/types";
+import { useWindowSize } from "@/lib/hooks";
 
 const App: React.FC = () => {
   const [gameState, setGameState] = useState<ExtendedGameState>({
@@ -35,6 +37,10 @@ const App: React.FC = () => {
     dyingPieces: [],
     started: false,
   });
+
+  const { width } = useWindowSize();
+
+  const fov = width < 1024 ? (width < 768 ? 75 : 55) : 40;
 
   const boardRef = useRef(gameState.board);
   boardRef.current = gameState.board;
@@ -57,8 +63,9 @@ const App: React.FC = () => {
       gameState.gameOver ||
       gameState.aiThinking ||
       piece.player !== gameState.turn
-    )
+    ) {
       return;
+    }
 
     if (gameState.selectedPiece?.id === piece.id) {
       setGameState((prev) => ({
@@ -88,7 +95,6 @@ const App: React.FC = () => {
   };
 
   const performMove = async (move: Move) => {
-    //
     const capturedPiece = move.captured
       ? gameState.board[move.captured.row]?.[move.captured.col]
       : null;
@@ -251,13 +257,16 @@ const App: React.FC = () => {
         shadows
         gl={{ antialias: true, toneMapping: THREE.ReinhardToneMapping }}
       >
-        <PerspectiveCamera makeDefault position={[0, 11, 11]} fov={40} />
+        <Stats />
+        <PerspectiveCamera makeDefault position={[0, 11, 11]} fov={fov} />
         <OrbitControls
           maxPolarAngle={Math.PI / 2.25}
           minDistance={7}
           maxDistance={20}
           enablePan={false}
           makeDefault
+          enableDamping
+          dampingFactor={0.05}
         />
 
         <color attach="background" args={["#020202"]} />
@@ -295,9 +304,9 @@ const App: React.FC = () => {
 
         <ContactShadows
           position={[0, -0.45, 0]}
-          resolution={1024}
+          resolution={512}
           scale={15}
-          blur={3}
+          blur={2}
           opacity={0.8}
           far={10}
           color="#000"
