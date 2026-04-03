@@ -26,7 +26,12 @@ import { useWindowSize } from "@/lib/hooks";
 
 const isDev = process.env.NODE_ENV === "development";
 
-const App: React.FC = () => {
+const useFow = () => {
+  const { width } = useWindowSize();
+  return width < 1024 ? (width < 768 ? 75 : 55) : 40;
+};
+
+const useGame = () => {
   const [gameState, setGameState] = useState<ExtendedGameState>({
     board: createInitialBoard(),
     turn: Player.RED,
@@ -39,13 +44,6 @@ const App: React.FC = () => {
     dyingPieces: [],
     started: false,
   });
-
-  const { width } = useWindowSize();
-
-  const fov = width < 1024 ? (width < 768 ? 75 : 55) : 40;
-
-  const boardRef = useRef(gameState.board);
-  boardRef.current = gameState.board;
 
   const checkGameOver = (board: (Piece | null)[][], turn: Player) => {
     const moves = getValidMoves(board, turn);
@@ -253,10 +251,29 @@ const App: React.FC = () => {
     });
   };
 
+  return {
+    gameState,
+    handlePieceClick,
+    handleSquareClick,
+    performMove,
+    restartGame,
+  };
+};
+
+const App: React.FC = () => {
+  const fov = useFow();
+
+  const { gameState, handlePieceClick, handleSquareClick, restartGame } =
+    useGame();
+
+  const boardRef = useRef(gameState.board);
+  boardRef.current = gameState.board;
+
   return (
     <div className="w-full h-screen relative bg-black">
       <Canvas
         shadows
+        dpr={[1, 1.5]}
         gl={{ antialias: true, toneMapping: THREE.ReinhardToneMapping }}
       >
         {isDev && <Stats />}
@@ -290,7 +307,7 @@ const App: React.FC = () => {
         <pointLight position={[-12, 6, -12]} intensity={0.7} color="#581c87" />
         <ambientLight intensity={0.4} />
 
-        <Environment preset="night" blur={0.8} />
+        <Environment preset="night" resolution={256} />
 
         <Float speed={1.2} rotationIntensity={0.05} floatIntensity={0.1}>
           <Board3D
