@@ -23,11 +23,17 @@ import UIOverlay from "@/components/UIOverlay";
 
 import { Player, type Piece, type Move, type ExtendedGameState } from "@/types";
 import { useWindowSize } from "@/lib/hooks";
+import {
+  COLOR_BACKGROUND,
+  COLOR_LIGHT_RED_TURN,
+  COLOR_LIGHT_BLACK_TURN,
+  COLOR_AMBIENT_ACCENT,
+  COLOR_SHADOW,
+} from "@/app/colors";
 
 const isDev = process.env.NODE_ENV === "development";
 
-const useFow = () => {
-  const { width } = useWindowSize();
+const getFow = (width: number) => {
   return width < 1024 ? (width < 768 ? 75 : 55) : 40;
 };
 
@@ -261,13 +267,14 @@ const useGame = () => {
 };
 
 const App: React.FC = () => {
-  const fov = useFow();
-
   const { gameState, handlePieceClick, handleSquareClick, restartGame } =
     useGame();
 
   const boardRef = useRef(gameState.board);
   boardRef.current = gameState.board;
+  const { width } = useWindowSize();
+
+  const fov = getFow(width);
 
   return (
     <div className="w-full h-screen relative bg-black">
@@ -288,8 +295,8 @@ const App: React.FC = () => {
           dampingFactor={0.05}
         />
 
-        <color attach="background" args={["#020202"]} />
-        <fog attach="fog" args={["#020202", 12, 35]} />
+        <color attach="background" args={[COLOR_BACKGROUND]} />
+        <fog attach="fog" args={[COLOR_BACKGROUND, 12, 35]} />
 
         {/* Main dynamic lights */}
         <group rotation={[0, gameState.turn === Player.RED ? 0 : Math.PI, 0]}>
@@ -300,11 +307,19 @@ const App: React.FC = () => {
             castShadow
             intensity={2.5}
             shadow-mapSize={2048}
-            color={gameState.turn === Player.RED ? "#ffedd5" : "#e0f2fe"}
+            color={
+              gameState.turn === Player.RED
+                ? COLOR_LIGHT_RED_TURN
+                : COLOR_LIGHT_BLACK_TURN
+            }
           />
         </group>
 
-        <pointLight position={[-12, 6, -12]} intensity={0.7} color="#581c87" />
+        <pointLight
+          position={[-12, 6, -12]}
+          intensity={0.7}
+          color={COLOR_AMBIENT_ACCENT}
+        />
         <ambientLight intensity={0.4} />
 
         <Environment preset="night" resolution={256} />
@@ -328,7 +343,7 @@ const App: React.FC = () => {
           blur={2}
           opacity={0.8}
           far={10}
-          color="#000"
+          color={COLOR_SHADOW}
         />
       </Canvas>
 

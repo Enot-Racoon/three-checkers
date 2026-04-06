@@ -3,6 +3,25 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 import { Player, PieceType, type Piece, type Move } from "@/types";
+import {
+  COLOR_BOARD_FRAME,
+  COLOR_SQUARE_LIGHT,
+  COLOR_SQUARE_DARK,
+  COLOR_HIGHLIGHT_VALID_MOVE,
+  COLOR_HIGHLIGHT_LAST_MOVE,
+  COLOR_PIECE_RED,
+  COLOR_PIECE_RED_EMISSIVE,
+  COLOR_PIECE_RED_RING,
+  COLOR_PIECE_BLACK,
+  COLOR_PIECE_BLACK_EMISSIVE,
+  COLOR_PIECE_BLACK_RING,
+  COLOR_PIECE_BLACK_DYING,
+  COLOR_KING_CROWN,
+  COLOR_KING_CROWN_TORUS,
+  COLOR_SELECTION_RING,
+  COLOR_EMISSIVE_NONE,
+  COLOR_DYING_GLOW,
+} from "@/app/colors";
 
 interface Board3DProps {
   board: (Piece | null)[][];
@@ -81,7 +100,7 @@ const Board3D: React.FC<Board3DProps> = ({
       <mesh position={[0, -0.26, 0]} receiveShadow>
         <boxGeometry args={[size + 1.2, 0.4, size + 1.2]} />
         <meshPhysicalMaterial
-          color="#050505"
+          color={COLOR_BOARD_FRAME}
           roughness={0.05}
           metalness={0.9}
           reflectivity={1}
@@ -123,12 +142,12 @@ const Square: React.FC<SquareProps> = ({
     }
   });
 
-  const baseColor = isDark ? "#121212" : "#f0f0f0";
+  const baseColor = isDark ? COLOR_SQUARE_DARK : COLOR_SQUARE_LIGHT;
   const emissiveColor = isValidTarget
-    ? "#3b82f6"
+    ? COLOR_HIGHLIGHT_VALID_MOVE
     : isLastMove
-      ? "#fbbf24"
-      : "#000";
+      ? COLOR_HIGHLIGHT_LAST_MOVE
+      : COLOR_EMISSIVE_NONE;
 
   return (
     <mesh
@@ -232,8 +251,12 @@ const CheckersPiece: React.FC<PieceProps> = ({
     }
   });
 
-  const color = piece.player === Player.RED ? "#dc2626" : "#0c0c0c";
-  const emissive = piece.player === Player.RED ? "#991b1b" : "#4b5563";
+  const color =
+    piece.player === Player.RED ? COLOR_PIECE_RED : COLOR_PIECE_BLACK;
+  const emissive =
+    piece.player === Player.RED
+      ? COLOR_PIECE_RED_EMISSIVE
+      : COLOR_PIECE_BLACK_EMISSIVE;
 
   return (
     <group
@@ -251,7 +274,7 @@ const CheckersPiece: React.FC<PieceProps> = ({
           color={color}
           roughness={0.05}
           metalness={0.5}
-          emissive={isSelected ? emissive : "#000"}
+          emissive={isSelected ? emissive : COLOR_EMISSIVE_NONE}
           emissiveIntensity={0}
           clearcoat={1}
           clearcoatRoughness={0}
@@ -262,7 +285,11 @@ const CheckersPiece: React.FC<PieceProps> = ({
       <mesh position={[0, 0.125, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[0.22, 0.38, 32]} />
         <meshStandardMaterial
-          color={piece.player === Player.RED ? "#7f1d1d" : "#171717"}
+          color={
+            piece.player === Player.RED
+              ? COLOR_PIECE_RED_RING
+              : COLOR_PIECE_BLACK_RING
+          }
           roughness={0.4}
         />
       </mesh>
@@ -271,11 +298,19 @@ const CheckersPiece: React.FC<PieceProps> = ({
         <group position={[0, 0.18, 0]}>
           <mesh castShadow>
             <cylinderGeometry args={[0.28, 0.38, 0.12, 32]} />
-            <meshStandardMaterial color="#d97706" metalness={1} roughness={0} />
+            <meshStandardMaterial
+              color={COLOR_KING_CROWN}
+              metalness={1}
+              roughness={0}
+            />
           </mesh>
           <mesh position={[0, 0.12, 0]} rotation={[Math.PI / 2, 0, 0]}>
             <torusGeometry args={[0.22, 0.04, 16, 48]} />
-            <meshStandardMaterial color="#fcd34d" metalness={1} roughness={0} />
+            <meshStandardMaterial
+              color={COLOR_KING_CROWN_TORUS}
+              metalness={1}
+              roughness={0}
+            />
           </mesh>
         </group>
       )}
@@ -283,7 +318,11 @@ const CheckersPiece: React.FC<PieceProps> = ({
       {isSelected && (
         <mesh position={[0, -0.12, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[0.6, 0.72, 64]} />
-          <meshBasicMaterial color="#3b82f6" transparent opacity={0.4} />
+          <meshBasicMaterial
+            color={COLOR_SELECTION_RING}
+            transparent
+            opacity={0.4}
+          />
         </mesh>
       )}
     </group>
@@ -304,7 +343,8 @@ const DyingPiece: React.FC<{ piece: Piece; offset: number }> = ({
     }
   });
 
-  const color = piece.player === Player.RED ? "#dc2626" : "#0a0a0a";
+  const color =
+    piece.player === Player.RED ? COLOR_PIECE_RED : COLOR_PIECE_BLACK_DYING;
 
   return (
     <mesh
@@ -317,7 +357,7 @@ const DyingPiece: React.FC<{ piece: Piece; offset: number }> = ({
         color={color}
         transparent
         opacity={0.8}
-        emissive="#fff"
+        emissive={COLOR_DYING_GLOW}
         emissiveIntensity={0.6}
       />
     </mesh>
