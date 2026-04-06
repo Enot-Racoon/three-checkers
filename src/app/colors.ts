@@ -12,13 +12,13 @@ export const SQUARE_LIGHT = "#f0f0f0";
 export const SQUARE_DARK = "#121212";
 
 // ─── Piece Colors ─────────────────────────────────────────────
-export const PIECE_ONE = "#dc2626";
-export const PIECE_ONE_EMISSIVE = "#991b1b";
-export const PIECE_ONE_RING = "#7f1d1d";
+export const PIECE_ONE = "hsla(0, 72%, 51%, 1.00)";
+export const PIECE_ONE_EMISSIVE = "hsla(0, 70%, 35%, 1.00)";
+export const PIECE_ONE_RING = "hsla(0, 63%, 31%, 1.00)";
 
-export const PIECE_TWO = "#0c0c0c";
-export const PIECE_TWO_EMISSIVE = "#4b5563";
-export const PIECE_TWO_RING = "#171717";
+export const PIECE_TWO = "hsla(230, 60%, 50%, 1.00)";
+export const PIECE_TWO_EMISSIVE = "hsla(230, 64%, 34%, 1.00)";
+export const PIECE_TWO_RING = "hsla(230, 60%, 30%, 1.00)";
 
 // Dying piece variant (slightly different from live Player 2)
 export const PIECE_TWO_DYING = "#0a0a0a";

@@ -300,7 +300,7 @@ const App: React.FC = () => {
             penumbra={0.6}
             castShadow
             intensity={2.5}
-            shadow-mapSize={2048}
+            shadow-mapSize={1024}
             color={
               gameState.turn === Player.ONE
                 ? Colors.LIGHT_ONE_TURN
