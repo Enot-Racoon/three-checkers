@@ -16,16 +16,16 @@ export const createInitialBoard = (): (Piece | null)[][] => {
         }
         if (row < 3) {
           boardRow[col] = {
-            id: `black-${row}-${col}`,
-            player: Player.BLACK,
+            id: `two-${row}-${col}`,
+            player: Player.TWO,
             type: PieceType.NORMAL,
             row,
             col,
           };
         } else if (row > 4) {
           boardRow[col] = {
-            id: `red-${row}-${col}`,
-            player: Player.RED,
+            id: `one-${row}-${col}`,
+            player: Player.ONE,
             type: PieceType.NORMAL,
             row,
             col,
@@ -80,7 +80,7 @@ const getNormalMoves = (board: (Piece | null)[][], piece: Piece): Move[] => {
           [-1, 1],
           [-1, -1],
         ]
-      : piece.player === Player.BLACK
+      : piece.player === Player.TWO
         ? [
             [1, 1],
             [1, -1],
@@ -113,7 +113,7 @@ const getDirections = (piece: Piece) => {
     ];
   }
 
-  if (piece.player === Player.BLACK) {
+  if (piece.player === Player.TWO) {
     return [
       [1, 1],
       [1, -1],
@@ -185,9 +185,9 @@ export const applyMove = (
 
   // Check King promotion
   const updatedPiece = rowToMove[move.to.col]!;
-  if (updatedPiece.player === Player.BLACK && move.to.row === 7) {
+  if (updatedPiece.player === Player.TWO && move.to.row === 7) {
     updatedPiece.type = PieceType.KING;
-  } else if (updatedPiece.player === Player.RED && move.to.row === 0) {
+  } else if (updatedPiece.player === Player.ONE && move.to.row === 0) {
     updatedPiece.type = PieceType.KING;
   }
 

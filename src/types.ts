@@ -1,6 +1,6 @@
 export enum Player {
-  RED = "RED",
-  BLACK = "BLACK",
+  ONE = "ONE",
+  TWO = "TWO",
 }
 
 export enum PieceType {

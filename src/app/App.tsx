@@ -23,13 +23,7 @@ import UIOverlay from "@/components/UIOverlay";
 
 import { Player, type Piece, type Move, type ExtendedGameState } from "@/types";
 import { useWindowSize } from "@/lib/hooks";
-import {
-  COLOR_BACKGROUND,
-  COLOR_LIGHT_RED_TURN,
-  COLOR_LIGHT_BLACK_TURN,
-  COLOR_AMBIENT_ACCENT,
-  COLOR_SHADOW,
-} from "@/app/colors";
+import * as Colors from "@/app/colors";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -40,7 +34,7 @@ const getFow = (width: number) => {
 const useGame = () => {
   const [gameState, setGameState] = useState<ExtendedGameState>({
     board: createInitialBoard(),
-    turn: Player.RED,
+    turn: Player.ONE,
     selectedPiece: null,
     validMoves: [],
     gameOver: false,
@@ -57,7 +51,7 @@ const useGame = () => {
       setGameState((prev) => ({
         ...prev,
         gameOver: true,
-        winner: turn === Player.RED ? Player.BLACK : Player.RED,
+        winner: turn === Player.ONE ? Player.TWO : Player.ONE,
       }));
       return true;
     }
@@ -143,7 +137,7 @@ const useGame = () => {
       }
     }
 
-    const nextTurn = gameState.turn === Player.RED ? Player.BLACK : Player.RED;
+    const nextTurn = gameState.turn === Player.ONE ? Player.TWO : Player.ONE;
 
     setGameState((prev) => ({
       ...prev,
@@ -155,7 +149,7 @@ const useGame = () => {
     }));
 
     if (!checkGameOver(newBoard, nextTurn)) {
-      if (nextTurn === Player.BLACK) {
+      if (nextTurn === Player.TWO) {
         await triggerAI(newBoard);
       } else {
         console.log(`Player moved piece to ${move.to.row},${move.to.col}`);
@@ -209,7 +203,7 @@ const useGame = () => {
         if (wasJump) {
           const piece = workingBoard[currentMove.to.row]?.[currentMove.to.col];
           if (piece) {
-            nextJumps = getValidMoves(workingBoard, Player.BLACK, piece).filter(
+            nextJumps = getValidMoves(workingBoard, Player.TWO, piece).filter(
               (m) => !!m.captured,
             );
           }
@@ -223,7 +217,7 @@ const useGame = () => {
         }
       }
 
-      const nextTurn = Player.RED;
+      const nextTurn = Player.ONE;
       setGameState((prev) => ({
         ...prev,
         turn: nextTurn,
@@ -237,7 +231,7 @@ const useGame = () => {
         ...prev,
         aiThinking: false,
         gameOver: true,
-        winner: Player.RED,
+        winner: Player.ONE,
       }));
     }
   };
@@ -245,7 +239,7 @@ const useGame = () => {
   const restartGame = () => {
     setGameState({
       board: createInitialBoard(),
-      turn: Player.RED,
+      turn: Player.ONE,
       selectedPiece: null,
       validMoves: [],
       gameOver: false,
@@ -295,11 +289,11 @@ const App: React.FC = () => {
           dampingFactor={0.05}
         />
 
-        <color attach="background" args={[COLOR_BACKGROUND]} />
-        <fog attach="fog" args={[COLOR_BACKGROUND, 12, 35]} />
+        <color attach="background" args={[Colors.BACKGROUND]} />
+        <fog attach="fog" args={[Colors.BACKGROUND, 12, 35]} />
 
         {/* Main dynamic lights */}
-        <group rotation={[0, gameState.turn === Player.RED ? 0 : Math.PI, 0]}>
+        <group rotation={[0, gameState.turn === Player.ONE ? 0 : Math.PI, 0]}>
           <spotLight
             position={[10, 15, 10]}
             angle={0.35}
@@ -308,9 +302,9 @@ const App: React.FC = () => {
             intensity={2.5}
             shadow-mapSize={2048}
             color={
-              gameState.turn === Player.RED
-                ? COLOR_LIGHT_RED_TURN
-                : COLOR_LIGHT_BLACK_TURN
+              gameState.turn === Player.ONE
+                ? Colors.LIGHT_ONE_TURN
+                : Colors.LIGHT_TWO_TURN
             }
           />
         </group>
@@ -318,7 +312,7 @@ const App: React.FC = () => {
         <pointLight
           position={[-12, 6, -12]}
           intensity={0.7}
-          color={COLOR_AMBIENT_ACCENT}
+          color={Colors.AMBIENT_ACCENT}
         />
         <ambientLight intensity={0.4} />
 
@@ -343,7 +337,7 @@ const App: React.FC = () => {
           blur={2}
           opacity={0.8}
           far={10}
-          color={COLOR_SHADOW}
+          color={Colors.SHADOW}
         />
       </Canvas>
 

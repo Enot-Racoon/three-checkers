@@ -11,10 +11,10 @@ const evaluateBoard = (board: (Piece | null)[][]): number => {
       const p = board[r]?.[c];
       if (p) {
         const val = p.type === PieceType.KING ? KING_VALUE : PIECE_VALUE;
-        score += p.player === Player.BLACK ? val : -val;
+        score += p.player === Player.TWO ? val : -val;
         // Bonus for advancement
         if (p.type === PieceType.NORMAL) {
-          score += (p.player === Player.BLACK ? r : 7 - r) * 0.5;
+          score += (p.player === Player.TWO ? r : 7 - r) * 0.5;
         }
       }
     }
@@ -26,7 +26,7 @@ export const getBestMove = (
   board: (Piece | null)[][],
   depth: number,
 ): Move | null => {
-  const moves = getValidMoves(board, Player.BLACK);
+  const moves = getValidMoves(board, Player.TWO);
   if (moves.length === 0) return null;
 
   let bestVal = -Infinity;
@@ -53,7 +53,7 @@ const minimax = (
 ): number => {
   if (depth === 0) return evaluateBoard(board);
 
-  const player = isMaximizing ? Player.BLACK : Player.RED;
+  const player = isMaximizing ? Player.TWO : Player.ONE;
   const moves = getValidMoves(board, player);
 
   if (moves.length === 0) return isMaximizing ? -1000 : 1000;

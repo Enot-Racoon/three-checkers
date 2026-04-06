@@ -14,7 +14,7 @@ describe("aiLogic", () => {
     });
 
     test("should return null when no moves available", () => {
-      // Create a board where black has no pieces
+      // Create a board where Player Two has no pieces
       const board: (Piece | null)[][] = Array.from({ length: 8 }, () =>
         Array.from({ length: 8 }, () => null),
       );
@@ -31,19 +31,19 @@ describe("aiLogic", () => {
       // Place black piece
       if (board[2]?.[1]) {
         board[2][1] = {
-          id: "black-test",
-          player: Player.BLACK,
+          id: "two-test",
+          player: Player.TWO,
           type: PieceType.NORMAL,
           row: 2,
           col: 1,
         };
       }
 
-      // Place red piece that can be captured (diagonally in front of black)
+      // Place Player One piece that can be captured (diagonally in front of Player Two)
       if (board[3]?.[2]) {
         board[3][2] = {
-          id: "red-test",
-          player: Player.RED,
+          id: "one-test",
+          player: Player.ONE,
           type: PieceType.NORMAL,
           row: 3,
           col: 2,
@@ -60,7 +60,7 @@ describe("aiLogic", () => {
       const board = createInitialBoard();
       const move = getBestMove(board, 3);
       expect(move).not.toBeNull();
-      // AI plays as black, should move forward (increase row)
+      // AI plays as Player Two, should move forward (increase row)
       if (move) {
         expect(move.to.row).toBeGreaterThan(move.from.row);
       }
@@ -73,22 +73,22 @@ describe("aiLogic", () => {
         Array.from({ length: 8 }, () => null),
       );
 
-      // Place black piece
+      // Place Player Two piece
       if (board[2]?.[1]) {
         board[2][1] = {
-          id: "black-1",
-          player: Player.BLACK,
+          id: "two-1",
+          player: Player.TWO,
           type: PieceType.NORMAL,
           row: 2,
           col: 1,
         };
       }
 
-      // Place red pieces that can be captured
+      // Place Player One pieces that can be captured
       if (board[3]?.[2]) {
         board[3][2] = {
-          id: "red-1",
-          player: Player.RED,
+          id: "one-1",
+          player: Player.ONE,
           type: PieceType.NORMAL,
           row: 3,
           col: 2,
@@ -97,8 +97,8 @@ describe("aiLogic", () => {
 
       if (board[3]?.[0]) {
         board[3][0] = {
-          id: "red-2",
-          player: Player.RED,
+          id: "one-2",
+          player: Player.ONE,
           type: PieceType.NORMAL,
           row: 3,
           col: 0,

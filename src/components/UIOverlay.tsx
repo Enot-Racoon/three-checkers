@@ -11,12 +11,12 @@ interface UIOverlayProps {
 }
 
 const UIOverlay: React.FC<UIOverlayProps> = ({ gameState, onRestart }) => {
-  const redCount = gameState.board
+  const oneCount = gameState.board
     .flat()
-    .filter((p) => p?.player === Player.RED).length;
-  const blackCount = gameState.board
+    .filter((p) => p?.player === Player.ONE).length;
+  const twoCount = gameState.board
     .flat()
-    .filter((p) => p?.player === Player.BLACK).length;
+    .filter((p) => p?.player === Player.TWO).length;
 
   return (
     <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-6 md:p-10 font-sans">
@@ -28,9 +28,9 @@ const UIOverlay: React.FC<UIOverlayProps> = ({ gameState, onRestart }) => {
               Player
             </span>
             <div
-              className={`w-12 h-4 rounded-full mt-1 ${gameState.turn === Player.RED ? "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" : "bg-zinc-700"}`}
+              className={`w-12 h-4 rounded-full mt-1 ${gameState.turn === Player.ONE ? "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" : "bg-zinc-700"}`}
             />
-            <span className="text-xl font-black mt-1">{redCount}</span>
+            <span className="text-xl font-black mt-1">{oneCount}</span>
           </div>
           <div className="h-10 w-px bg-zinc-800" />
           <div className="flex flex-col items-center">
@@ -38,9 +38,9 @@ const UIOverlay: React.FC<UIOverlayProps> = ({ gameState, onRestart }) => {
               CPU
             </span>
             <div
-              className={`w-12 h-4 rounded-full mt-1 ${gameState.turn === Player.BLACK ? "bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" : "bg-zinc-700"}`}
+              className={`w-12 h-4 rounded-full mt-1 ${gameState.turn === Player.TWO ? "bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" : "bg-zinc-700"}`}
             />
-            <span className="text-xl font-black mt-1">{blackCount}</span>
+            <span className="text-xl font-black mt-1">{twoCount}</span>
           </div>
         </div>
 
@@ -59,7 +59,7 @@ const UIOverlay: React.FC<UIOverlayProps> = ({ gameState, onRestart }) => {
           <div className="pointer-events-auto bg-black/90 backdrop-blur-xl border border-zinc-800 p-8 rounded-3xl shadow-2xl flex flex-col items-center text-center max-w-sm animate-in fade-in zoom-in duration-300">
             <h2 className="text-4xl font-black mb-2 italic">GAME OVER</h2>
             <p className="text-zinc-400 mb-6">
-              {gameState.winner === Player.RED
+              {gameState.winner === Player.ONE
                 ? "You actually won? I must have glitched."
                 : "Predictable. Better luck next century."}
             </p>
