@@ -1,10 +1,10 @@
 import { getValidMoves, applyMove } from "./gameLogic";
-import { Player, PieceType, type Piece, type Move } from "@/types";
+import { Player, PieceType, type Piece, type Move, type Board } from "@/types";
 
 const PIECE_VALUE = 10;
 const KING_VALUE = 20;
 
-const evaluateBoard = (board: (Piece | null)[][]): number => {
+const evaluateBoard = (board: Board): number => {
   let score = 0;
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 8; c++) {
@@ -22,10 +22,7 @@ const evaluateBoard = (board: (Piece | null)[][]): number => {
   return score;
 };
 
-export const getBestMove = (
-  board: (Piece | null)[][],
-  depth: number,
-): Move | null => {
+export const getBestMove = (board: Board, depth: number): Move | null => {
   const moves = getValidMoves(board, Player.TWO);
   if (moves.length === 0) return null;
 
@@ -45,7 +42,7 @@ export const getBestMove = (
 };
 
 const minimax = (
-  board: (Piece | null)[][],
+  board: Board,
   depth: number,
   isMaximizing: boolean,
   alpha: number,

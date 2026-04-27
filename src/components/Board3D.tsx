@@ -2,11 +2,11 @@ import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-import { Player, PieceType, type Piece, type Move } from "@/types";
+import { Player, PieceType, type Piece, type Move, type Board } from "@/types";
 import * as Colors from "@/app/colors";
 
 interface Board3DProps {
-  board: (Piece | null)[][];
+  board: Board;
   selectedPiece: Piece | null;
   validMoves: Move[];
   dyingPieces: Piece[];

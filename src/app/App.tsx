@@ -21,7 +21,13 @@ import { getBestMove } from "@/logic/aiLogic";
 import Board3D from "@/components/Board3D";
 import UIOverlay from "@/components/UIOverlay";
 
-import { Player, type Piece, type Move, type ExtendedGameState } from "@/types";
+import {
+  Player,
+  type Piece,
+  type Move,
+  type ExtendedGameState,
+  type Board,
+} from "@/types";
 import { useWindowSize } from "@/lib/hooks";
 import * as Colors from "@/app/colors";
 
@@ -45,7 +51,7 @@ const useGame = () => {
     started: false,
   });
 
-  const checkGameOver = (board: (Piece | null)[][], turn: Player) => {
+  const checkGameOver = (board: Board, turn: Player) => {
     const moves = getValidMoves(board, turn);
     if (moves.length === 0) {
       setGameState((prev) => ({
@@ -157,7 +163,7 @@ const useGame = () => {
     }
   };
 
-  const triggerAI = async (currentBoard: (Piece | null)[][]) => {
+  const triggerAI = async (currentBoard: Board) => {
     setGameState((prev) => ({ ...prev, aiThinking: true }));
 
     // Small delay to let player realize it's AI turn

@@ -1,7 +1,7 @@
 import { describe, test, expect } from "bun:test";
 import { getBestMove } from "@/logic/aiLogic";
 import { createInitialBoard } from "@/logic/gameLogic";
-import { Player, PieceType, type Piece } from "@/types";
+import { Player, PieceType, type Board } from "@/types";
 
 describe("aiLogic", () => {
   describe("getBestMove", () => {
@@ -15,7 +15,7 @@ describe("aiLogic", () => {
 
     test("should return null when no moves available", () => {
       // Create a board where Player Two has no pieces
-      const board: (Piece | null)[][] = Array.from({ length: 8 }, () =>
+      const board: Board = Array.from({ length: 8 }, () =>
         Array.from({ length: 8 }, () => null),
       );
       const move = getBestMove(board, 2);
@@ -24,7 +24,7 @@ describe("aiLogic", () => {
 
     test("should prioritize captures", () => {
       // Create a board where black can capture
-      const board: (Piece | null)[][] = Array.from({ length: 8 }, () =>
+      const board: Board = Array.from({ length: 8 }, () =>
         Array.from({ length: 8 }, () => null),
       );
 
@@ -69,7 +69,7 @@ describe("aiLogic", () => {
 
   describe("multi-jump scenario", () => {
     test("should handle position after capture", () => {
-      const board: (Piece | null)[][] = Array.from({ length: 8 }, () =>
+      const board: Board = Array.from({ length: 8 }, () =>
         Array.from({ length: 8 }, () => null),
       );
 

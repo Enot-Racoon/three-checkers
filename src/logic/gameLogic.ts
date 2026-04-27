@@ -1,9 +1,9 @@
-import { Player, PieceType, type Move, type Piece } from "@/types";
+import { Player, PieceType, type Move, type Piece, type Board } from "@/types";
 
 export const BOARD_SIZE = 8;
 
-export const createInitialBoard = (): (Piece | null)[][] => {
-  const board: (Piece | null)[][] = Array.from({ length: BOARD_SIZE }, () =>
+export const createInitialBoard = (): Board => {
+  const board: Board = Array.from({ length: BOARD_SIZE }, () =>
     Array.from({ length: BOARD_SIZE }, () => null),
   );
 
@@ -38,7 +38,7 @@ export const createInitialBoard = (): (Piece | null)[][] => {
 };
 
 export const getValidMoves = (
-  board: (Piece | null)[][],
+  board: Board,
   player: Player,
   piece: Piece | null = null,
 ): Move[] => {
@@ -70,7 +70,7 @@ export const getValidMoves = (
   return moves;
 };
 
-const getNormalMoves = (board: (Piece | null)[][], piece: Piece): Move[] => {
+const getNormalMoves = (board: Board, piece: Piece): Move[] => {
   const moves: Move[] = [];
   const directions =
     piece.type === PieceType.KING
@@ -126,7 +126,7 @@ const getDirections = (piece: Piece) => {
   ];
 };
 
-const getJumpMoves = (board: (Piece | null)[][], piece: Piece): Move[] => {
+const getJumpMoves = (board: Board, piece: Piece): Move[] => {
   const moves: Move[] = [];
   const directions = getDirections(piece);
 
@@ -154,9 +154,9 @@ const isValidPosition = (row: number, col: number) => {
   return row >= 0 && row < 8 && col >= 0 && col < 8;
 };
 export const applyMove = (
-  board: (Piece | null)[][],
+  board: Board,
   move: Move,
-): { newBoard: (Piece | null)[][]; wasJump: boolean } => {
+): { newBoard: Board; wasJump: boolean } => {
   const newBoard = board.map((row) => [...row]);
   const rowToMove = newBoard[move.to.row];
   const rowFromMove = newBoard[move.from.row];

@@ -27,8 +27,10 @@ export interface Move {
   captured?: Position;
 }
 
+export type Board = (Piece | null)[][];
+
 export interface GameState {
-  board: (Piece | null)[][];
+  board: Board;
   turn: Player;
   selectedPiece: Piece | null;
   validMoves: Move[];
