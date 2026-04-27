@@ -150,9 +150,9 @@ const getJumpMoves = (board: (Piece | null)[][], piece: Piece): Move[] => {
   return moves;
 };
 
-const isValidPosition = (row: number, col: number) =>
-  row >= 0 && row < 8 && col >= 0 && col < 8;
-
+const isValidPosition = (row: number, col: number) => {
+  return row >= 0 && row < 8 && col >= 0 && col < 8;
+};
 export const applyMove = (
   board: (Piece | null)[][],
   move: Move,
