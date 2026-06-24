@@ -68,8 +68,8 @@ async function sendMessage(chatId: number, text: string) {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const update = req.body as Update;
-  const message = update.message;
+  const update = req.body as Update | undefined;
+  const message = update?.message;
 
   if (!message) {
     return res.status(200).send("ok");
