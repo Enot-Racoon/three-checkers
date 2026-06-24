@@ -1,4 +1,4 @@
-import type { Config } from "@netlify/functions";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const startMessage =
   process.env.TELEGRAM_START_MESSAGE ||
@@ -67,12 +67,12 @@ async function sendMessage(chatId: number, text: string) {
   });
 }
 
-export default async function handler(request: Request) {
-  const update = (await request.json()) as Update;
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const update = req.body as Update;
   const message = update.message;
 
   if (!message) {
-    return new Response("ok");
+    return res.status(200).send("ok");
   }
 
   const chatId = message.chat.id;
@@ -84,9 +84,5 @@ export default async function handler(request: Request) {
     await sendMessage(chatId, otherMessage);
   }
 
-  return new Response("ok");
+  return res.status(200).send("ok");
 }
-
-export const config: Config = {
-  path: "/telegram-webhook",
-};
