@@ -176,7 +176,7 @@ const useGame = () => {
     if (bestMove) {
       let workingBoard = currentBoard;
       let currentMove = bestMove;
-      let [step] = currentMove.steps;
+      const [step] = currentMove.steps;
 
       // Execute sequence of jumps if it's a multi-jump
       while (currentMove && step) {
