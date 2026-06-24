@@ -96,7 +96,7 @@ const getNormalMoves = (board: Board, piece: Piece): Move[] => {
     if (isValidPosition(nr, nc) && board[nr]?.[nc] === null) {
       moves.push({
         from: { row: piece.row, col: piece.col },
-        to: { row: nr, col: nc },
+        steps: [{ to: { row: nr, col: nc } }],
       });
     }
   }
@@ -141,8 +141,12 @@ const getJumpMoves = (board: Board, piece: Piece): Move[] => {
       if (captured && captured.player !== piece.player) {
         moves.push({
           from: { row: piece.row, col: piece.col },
-          to: { row: endR, col: endC },
-          captured: { row: midR, col: midC },
+          steps: [
+            {
+              to: { row: endR, col: endC },
+              captured: { row: midR, col: midC },
+            },
+          ],
         });
       }
     }
@@ -158,37 +162,48 @@ export const applyMove = (
   move: Move,
 ): { newBoard: Board; wasJump: boolean } => {
   const newBoard = board.map((row) => [...row]);
-  const rowToMove = newBoard[move.to.row];
-  const rowFromMove = newBoard[move.from.row];
 
-  if (!rowToMove || !rowFromMove) {
+  const rowFromMove = newBoard[move.from.row];
+  if (!rowFromMove) {
     throw new Error("Invalid move");
   }
-  const piece = rowFromMove[move.from.col]!;
 
-  rowToMove[move.to.col] = {
-    ...piece,
-    row: move.to.row,
-    col: move.to.col,
-  };
+  let piece = rowFromMove[move.from.col]!;
   rowFromMove[move.from.col] = null;
 
   let wasJump = false;
-  if (move.captured) {
-    const rowToCapture = newBoard[move.captured.row];
-    if (!rowToCapture) {
-      throw new Error("Invalid move");
+
+  for (const step of move.steps) {
+    // remove captured
+    if (step.captured) {
+      const rowCaptured = newBoard[step.captured.row];
+      if (!rowCaptured) {
+        throw new Error("Invalid move");
+      }
+      rowCaptured[step.captured.col] = null;
+      wasJump = true;
     }
-    rowToCapture[move.captured.col] = null;
-    wasJump = true;
+
+    // move piece
+    piece = {
+      ...piece,
+      row: step.to.row,
+      col: step.to.col,
+    };
   }
 
-  // Check King promotion
-  const updatedPiece = rowToMove[move.to.col]!;
-  if (updatedPiece.player === Player.TWO && move.to.row === 7) {
-    updatedPiece.type = PieceType.KING;
-  } else if (updatedPiece.player === Player.ONE && move.to.row === 0) {
-    updatedPiece.type = PieceType.KING;
+  const rowPiece = newBoard[piece.row];
+  if (!rowPiece) {
+    throw new Error("Invalid move");
+  }
+
+  rowPiece[piece.col] = piece;
+
+  // promotion
+  if (piece.player === Player.TWO && piece.row === 7) {
+    piece.type = PieceType.KING;
+  } else if (piece.player === Player.ONE && piece.row === 0) {
+    piece.type = PieceType.KING;
   }
 
   return { newBoard, wasJump };

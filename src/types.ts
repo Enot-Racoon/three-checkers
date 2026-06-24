@@ -21,13 +21,19 @@ export interface Position {
   col: number;
 }
 
-export interface Move {
-  from: Position;
+export type Step = {
   to: Position;
   captured?: Position;
+};
+
+export interface Move {
+  from: Position;
+  steps: Step[];
 }
 
-export type Board = (Piece | null)[][];
+type BoardCell = Piece | null;
+type BoardRow = BoardCell[];
+export type Board = BoardRow[];
 
 export interface GameState {
   board: Board;

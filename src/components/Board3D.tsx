@@ -32,11 +32,11 @@ const Board3D: React.FC<Board3DProps> = ({
     for (let c = 0; c < size; c++) {
       const isDark = (r + c) % 2 !== 0;
       const isValidTarget = validMoves.some(
-        (m) => m.to.row === r && m.to.col === c,
+        (m) => m.steps[0]?.to.row === r && m.steps[0]?.to.col === c,
       );
       const isLastMoveHighlight =
         (lastMove?.from.row === r && lastMove?.from.col === c) ||
-        (lastMove?.to.row === r && lastMove?.to.col === c);
+        (lastMove?.steps[0]?.to.row === r && lastMove?.steps[0]?.to.col === c);
 
       squares.push(
         <Square

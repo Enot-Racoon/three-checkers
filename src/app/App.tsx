@@ -92,7 +92,7 @@ const useGame = () => {
   const handleSquareClick = (row: number, col: number) => {
     if (gameState.selectedPiece) {
       const move = gameState.validMoves.find(
-        (m) => m.to.row === row && m.to.col === col,
+        (m) => m.steps[0]?.to.row === row && m.steps[0]?.to.col === col,
       );
       if (move) {
         void performMove(move);
@@ -101,8 +101,11 @@ const useGame = () => {
   };
 
   const performMove = async (move: Move) => {
-    const capturedPiece = move.captured
-      ? gameState.board[move.captured.row]?.[move.captured.col]
+    const [step] = move.steps;
+    if (!step) return;
+
+    const capturedPiece = step.captured
+      ? gameState.board[step.captured.row]?.[step.captured.col]
       : null;
     const { newBoard, wasJump } = applyMove(gameState.board, move);
 
@@ -124,13 +127,13 @@ const useGame = () => {
     }
 
     if (wasJump) {
-      const updatedPiece = newBoard[move.to.row]?.[move.to.col];
+      const updatedPiece = newBoard[step.to.row]?.[step.to.col];
       if (!updatedPiece) return;
       const nextJumps = getValidMoves(
         newBoard,
         gameState.turn,
         updatedPiece,
-      ).filter((m) => !!m.captured);
+      ).filter((m) => m.steps.some((s) => !!s.captured));
       if (nextJumps.length > 0) {
         setGameState((prev) => ({
           ...prev,
@@ -158,7 +161,7 @@ const useGame = () => {
       if (nextTurn === Player.TWO) {
         await triggerAI(newBoard);
       } else {
-        console.log(`Player moved piece to ${move.to.row},${move.to.col}`);
+        console.log(`Player moved piece to ${step.to.row},${step.to.col}`);
       }
     }
   };
@@ -173,11 +176,12 @@ const useGame = () => {
     if (bestMove) {
       let workingBoard = currentBoard;
       let currentMove = bestMove;
+      let [step] = currentMove.steps;
 
       // Execute sequence of jumps if it's a multi-jump
-      while (currentMove) {
-        const captured = currentMove.captured
-          ? workingBoard[currentMove.captured.row]?.[currentMove.captured.col]
+      while (currentMove && step) {
+        const captured = step.captured
+          ? workingBoard[step.captured.row]?.[step.captured.col]
           : null;
         const { newBoard, wasJump } = applyMove(workingBoard, currentMove);
 
@@ -207,10 +211,10 @@ const useGame = () => {
         // Chain multi-jumps one by one
         let nextJumps: Move[] = [];
         if (wasJump) {
-          const piece = workingBoard[currentMove.to.row]?.[currentMove.to.col];
+          const piece = workingBoard[step.to.row]?.[step.to.col];
           if (piece) {
             nextJumps = getValidMoves(workingBoard, Player.TWO, piece).filter(
-              (m) => !!m.captured,
+              (m) => m.steps.some((s) => !!s.captured),
             );
           }
         }

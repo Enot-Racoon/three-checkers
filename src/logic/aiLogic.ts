@@ -1,5 +1,5 @@
 import { getValidMoves, applyMove } from "./gameLogic";
-import { Player, PieceType, type Piece, type Move, type Board } from "@/types";
+import { Player, PieceType, type Move, type Board } from "@/types";
 
 const PIECE_VALUE = 10;
 const KING_VALUE = 20;
