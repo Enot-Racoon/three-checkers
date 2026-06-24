@@ -18,6 +18,8 @@ This bot does not support chat messages.
 Press the button below to open the Chess Mini App.
 `.trim();
 
+const playButtonText = process.env.TELEGRAM_PLAY_BUTTON_TEXT || "Play";
+
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const WEB_APP_URL = process.env.TELEGRAM_WEB_APP_URL;
 
@@ -57,7 +59,7 @@ async function sendMessage(chatId: number, text: string) {
         inline_keyboard: [
           [
             {
-              text: "▶ Open Chess Board",
+              text: playButtonText,
               web_app: { url: WEB_APP_URL },
             },
           ],
