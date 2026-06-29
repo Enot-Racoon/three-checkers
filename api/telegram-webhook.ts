@@ -59,6 +59,7 @@ async function sendMessage(chatId: number, text: string) {
         inline_keyboard: [
           [
             {
+              style: "primary",
               text: playButtonText,
               web_app: { url: WEB_APP_URL },
             },
