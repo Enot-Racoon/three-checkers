@@ -5,7 +5,7 @@ import {
   applyMove,
   BOARD_SIZE,
 } from "@/logic/gameLogic";
-import { Player, PieceType } from "@/types";
+import { Player, PieceType, type Move } from "@/types";
 
 describe("gameLogic", () => {
   describe("createInitialBoard", () => {
@@ -89,9 +89,9 @@ describe("gameLogic", () => {
       const board = createInitialBoard();
       const onePiece = board[5]?.[0];
       if (onePiece) {
-        const move = {
+        const move: Move = {
           from: { row: 5, col: 0 },
-          to: { row: 4, col: 1 },
+          steps: [{ to: { row: 4, col: 1 } }],
         };
         const { newBoard } = applyMove(board, move);
         expect(newBoard[4]?.[1]).not.toBeNull();
@@ -102,10 +102,14 @@ describe("gameLogic", () => {
 
     test("should capture opponent piece", () => {
       const board = createInitialBoard();
-      const move = {
+      const move: Move = {
         from: { row: 5, col: 0 },
-        to: { row: 3, col: 2 },
-        captured: { row: 4, col: 1 },
+        steps: [
+          {
+            to: { row: 3, col: 2 },
+            captured: { row: 4, col: 1 },
+          },
+        ],
       };
       const { newBoard } = applyMove(board, move);
       expect(newBoard[4]?.[1]).toBeNull();
@@ -114,9 +118,9 @@ describe("gameLogic", () => {
     test("should promote to king when reaching opposite end", () => {
       const board = createInitialBoard();
       // Move red piece to king position
-      const move = {
+      const move: Move = {
         from: { row: 5, col: 0 },
-        to: { row: 4, col: 1 },
+        steps: [{ to: { row: 4, col: 1 } }],
       };
       const { newBoard } = applyMove(board, move);
       const piece = newBoard[4]?.[1];
@@ -127,9 +131,9 @@ describe("gameLogic", () => {
     test("should not mutate original board", () => {
       const board = createInitialBoard();
       const originalState = JSON.stringify(board);
-      const move = {
+      const move: Move = {
         from: { row: 5, col: 0 },
-        to: { row: 4, col: 1 },
+        steps: [{ to: { row: 4, col: 1 } }],
       };
       applyMove(board, move);
       expect(JSON.stringify(board)).toBe(originalState);
